@@ -1,94 +1,462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <title>{% block title %}Home{% endblock %}</title>
     <style>
         body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background-color: #0d6efd;
+            color: white;
+            transition: all 0.3s ease;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        #sidebar.collapsed {
+            margin-left: -250px;
+        }
+
+        #sidebar .sidebar-header {
+            padding: 20px;
+            background-color: #0b5ed7;
+        }
+
+        #sidebar .nav-link {
+            color: white;
+            padding: 10px 20px;
+            transition: all 0.3s;
+        }
+
+        #sidebar .nav-link:hover {
+            background-color: #0b5ed7;
+            padding-left: 25px;
+        }
+
+        #sidebar .sidebar-divider {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 15px 0;
+        }
+
+        #sidebar .sidebar-heading {
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #sidebar .nav-item.active .nav-link {
+            background-color: #0b5ed7;
+        }
+
+
+        #content {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            margin-left: 250px;
+            transition: all 0.3s ease;
+            width: 100%;
         }
+
+        #content.expanded {
+            margin-left: 0;
+        }
+
+        .border-left-primary {
+            border-left: .25rem solid #4e73df !important;
+        }
+
+        .border-left-success {
+            border-left: .25rem solid #1cc88a !important;
+        }
+
+        .border-left-info {
+            border-left: .25rem solid #36b9cc !important;
+        }
+
+        .border-left-warning {
+            border-left: .25rem solid #f6c23e !important;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            left: 260px;
+            top: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background-color: #0d6efd;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-btn.collapsed {
+            left: 10px;
+        }
+
+        .toggle-btn:hover {
+            background-color: #0b5ed7;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
         main {
             flex: 1;
+            padding: 20px;
+            margin-top: 40px;
         }
-        .navbar-brand {
-            font-weight: bold;
-        }
+
         .alert {
             margin-bottom: 0;
+        }
+
+        .submenu {
+            padding-left: 20px;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .nav-link[data-bs-toggle="collapse"] {
+            position: relative;
+        }
+
+        .nav-link[data-bs-toggle="collapse"]::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            transition: transform 0.3s;
+        }
+
+        .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                margin-left: -250px;
+            }
+
+            #content {
+                margin-left: 0;
+            }
+
+            #sidebar.active {
+                margin-left: 0;
+            }
+
+            .toggle-btn {
+                left: 10px;
+            }
+
+            .toggle-btn.active {
+                left: 260px;
+            }
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .alert {
+            margin: 10px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .alert-container {
+                width: 95%;
+                max-width: none;
+                padding: 0 10px;
+            }
+        }
+
+        /* Add fade out animation */
+        .alert.fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img class="navbar-brand rounded-circle img-fluid" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" style="width: 40px; height: 50px;" />
-                LLAS Coxitas
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link " href="/"><i class="fas fa-home"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link " href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus"></i> Sign Up</a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header d-flex align-items-center">
+            <img class="logo-img rounded-circle" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo"/>
+            <span class="fs-4">LLAS Coxitas</span>
         </div>
+        <ul class="nav flex-column mt-4">
+            {% if user.is_authenticated %}
+                <!-- Dashboard -->
+                <li class="sidebar-heading">Main</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home me-2"></i> Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                </li>
+
+                <!-- Orders Section -->
+                <div class="sidebar-divider"></div>
+                <li class="sidebar-heading">Orders</li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#orderSubmenu">
+                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                    </a>
+                    <div class="collapse submenu" id="orderSubmenu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/orders/new"><i class="fas fa-plus me-2"></i> New Order</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/orders/list"><i class="fas fa-list me-2"></i> Order List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/orders/pending"><i class="fas fa-clock me-2"></i> Pending</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Products Section -->
+                <div class="sidebar-divider"></div>
+                <li class="sidebar-heading">Products</li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#productSubmenu">
+                        <i class="fas fa-box me-2"></i> Products
+                    </a>
+                    <div class="collapse submenu" id="productSubmenu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products/new"><i class="fas fa-plus me-2"></i> Add
+                                    Product</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products/list"><i class="fas fa-list me-2"></i> Product List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/products/categories"><i class="fas fa-tags me-2"></i>
+                                    Categories</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Reports Section -->
+                <div class="sidebar-divider"></div>
+                <li class="sidebar-heading">Reports</li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#reportSubmenu">
+                        <i class="fas fa-chart-bar me-2"></i> Reports
+                    </a>
+                    <div class="collapse submenu" id="reportSubmenu">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/reports/sales"><i class="fas fa-chart-line me-2"></i>
+                                    Sales</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/reports/inventory"><i class="fas fa-warehouse me-2"></i>
+                                    Inventory</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Settings & Profile -->
+                <div class="sidebar-divider"></div>
+                <li class="sidebar-heading">Settings</li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile"><i class="fas fa-user me-2"></i> Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/settings"><i class="fas fa-cog me-2"></i> Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-2"></i> Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus me-2"></i> Sign Up</a>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Toggle Button -->
+    <button class="btn toggle-btn" type="button" id="sidebarCollapse">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Page Content -->
+    <div id="content">
+        <!-- Then, update the alerts section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
+                             data-auto-dismiss="true">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <main class="container">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="bg-light py-3 mt-auto">
+            <div class="container text-center">
+                <p class="mb-0">&copy; 2024 LLAS Coxitas. Developed by <a href="https://github.com/Eduwilll"
+                                                                          target="_blank">Eduwilll</a></p>
+            </div>
+        </footer>
     </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+</div>
 
-    <main class="container my-4">
-        {% block content %}
-        {% endblock %}
-    </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const toggleBtn = document.getElementById('sidebarCollapse');
 
-    <footer class="bg-light py-3 mt-auto">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2024 LLAS Coxitas. Developed by <a href="https://github.com/Eduwilll" target="_blank">Eduwilll</a></p>
-        </div>
-    </footer>
+        function updateToggleButton() {
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.classList.add('collapsed');
+            } else {
+                toggleBtn.classList.remove('collapsed');
+            }
+        }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {% block javascript %}
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('expanded');
+            updateToggleButton();
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('collapsed');
+                content.classList.add('expanded');
+                updateToggleButton();
+            }
+        });
+
+        // Add active class to current page link
+        const currentLocation = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            if (link.getAttribute('href') === currentLocation) {
+                link.parentElement.classList.add('active');
+                // If link is in submenu, expand the parent menu
+                const submenu = link.closest('.submenu');
+                if (submenu) {
+                    submenu.classList.add('show');
+                    const parentLink = submenu.previousElementSibling;
+                    if (parentLink) {
+                        parentLink.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            }
+        });
+    });
+</script>
+<!-- Add this JavaScript code before the closing body tag -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to handle alert dismissal
+        function dismissAlert(alert) {
+            alert.classList.add('fade-out');
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 500); // Wait for fade out animation to complete
+        }
+
+        // Get all alerts with auto-dismiss attribute
+        const alerts = document.querySelectorAll('.alert[data-auto-dismiss="true"]');
+
+        alerts.forEach(alert => {
+            // Set timeout to dismiss after 2 seconds
+            setTimeout(() => {
+                if (alert) {
+                    dismissAlert(alert);
+                }
+            }, 2000);
+
+            // Optional: Pause timer on hover
+            alert.addEventListener('mouseenter', function () {
+                alert.dataset.pause = 'true';
+            });
+
+            alert.addEventListener('mouseleave', function () {
+                alert.dataset.pause = 'false';
+            });
+        });
+    });
+</script>
+{% block javascript %}
     <script>
         function deleteNote(noteId) {
             fetch("/delete-note", {
                 method: "POST",
-                body: JSON.stringify({ noteId: noteId }),
+                body: JSON.stringify({noteId: noteId}),
             }).then((_res) => {
                 window.location.href = "/";
             });
         }
     </script>
-    {% endblock %}
+{% endblock %}
 </body>
 </html>
