@@ -1,25 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Início{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-4">
-    <!-- Dashboard Header -->
+    <!-- Cabeçalho do painel -->
+
+    <div class="alert alert-info">
+        Bem vindo, {{ current_user.first_name }}!
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3">WhatsApp Automation Dashboard</h1>
+        <h1 class="h3">Painel de Automação do WhatsApp</h1>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newBotModal">
-            <i class="fas fa-plus me-2"></i>New Bot
+            <i class="fas fa-plus me-2"></i>Novo Bot
         </button>
     </div>
 
-    <!-- Stats Cards Row -->
+    <!-- Linha de Cartões de Estatísticas -->
     <div class="row g-4 mb-4">
         <div class="col-xl-3 col-md-6">
             <div class="card border-left-primary h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Active Chats</div>
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Conversas Ativas</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_chats|default(18) }}</div>
                         </div>
                         <div class="col-auto">
@@ -35,8 +38,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Messages Today</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Mensagens Hoje</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ messages_today|default(245) }}</div>
                         </div>
                         <div class="col-auto">
@@ -52,8 +54,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Response Rate</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Taxa de Resposta</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">95%</div>
                         </div>
                         <div class="col-auto">
@@ -69,8 +70,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Active Bots</div>
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Bots Ativos</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_bots|default(3) }}</div>
                         </div>
                         <div class="col-auto">
@@ -82,47 +82,47 @@
         </div>
     </div>
 
-    <!-- Active Bots and Recent Messages -->
+    <!-- Bots Ativos e Mensagens Recentes -->
     <div class="row g-4">
-        <!-- Active Bots Table -->
+        <!-- Tabela de Bots Ativos -->
         <div class="col-xl-8">
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-robot me-2"></i>Active Bots</h5>
-                    <button class="btn btn-sm btn-primary">View All</button>
+                    <h5 class="mb-0"><i class="fas fa-robot me-2"></i>Bots Ativos</h5>
+                    <button class="btn btn-sm btn-primary">Ver Todos</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Bot Name</th>
+                                    <th>Nome do Bot</th>
                                     <th>Status</th>
-                                    <th>Chats</th>
-                                    <th>Messages</th>
-                                    <th>Actions</th>
+                                    <th>Conversas</th>
+                                    <th>Mensagens</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for bot in bots|default([
-                                    {'name': 'Customer Service Bot', 'status': 'Active', 'chats': 8, 'messages': 156},
-                                    {'name': 'Sales Bot', 'status': 'Active', 'chats': 5, 'messages': 89},
-                                    {'name': 'Support Bot', 'status': 'Inactive', 'chats': 0, 'messages': 0}
+                                    {'name': 'Bot de Atendimento ao Cliente', 'status': 'Ativo', 'chats': 8, 'messages': 156},
+                                    {'name': 'Bot de Vendas', 'status': 'Ativo', 'chats': 5, 'messages': 89},
+                                    {'name': 'Bot de Suporte', 'status': 'Inativo', 'chats': 0, 'messages': 0}
                                 ]) %}
                                 <tr>
                                     <td>{{ bot.name }}</td>
                                     <td>
-                                        <span class="badge bg-{{ 'success' if bot.status == 'Active' else 'danger' }}">
+                                        <span class="badge bg-{{ 'success' if bot.status == 'Ativo' else 'danger' }}">
                                             {{ bot.status }}
                                         </span>
                                     </td>
                                     <td>{{ bot.chats }}</td>
                                     <td>{{ bot.messages }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-primary me-1" title="Edit">
+                                        <button class="btn btn-sm btn-primary me-1" title="Editar">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger" title="Delete">
+                                        <button class="btn btn-sm btn-danger" title="Excluir">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -135,18 +135,18 @@
             </div>
         </div>
 
-        <!-- Recent Messages -->
+        <!-- Mensagens Recentes -->
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-message me-2"></i>Recent Messages</h5>
+                    <h5 class="mb-0"><i class="fas fa-message me-2"></i>Mensagens Recentes</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
                         {% for message in recent_messages|default([
-                            {'name': 'John Doe', 'message': 'When will my order arrive?', 'time': '5m ago', 'bot': 'Support'},
-                            {'name': 'Jane Smith', 'message': 'I need help with my account', 'time': '15m ago', 'bot': 'Customer Service'},
-                            {'name': 'Mike Johnson', 'message': 'Interested in your products', 'time': '30m ago', 'bot': 'Sales'}
+                            {'name': 'João Silva', 'message': 'Quando meu pedido vai chegar?', 'time': '5m atrás', 'bot': 'Suporte'},
+                            {'name': 'Maria Souza', 'message': 'Preciso de ajuda com minha conta', 'time': '15m atrás', 'bot': 'Atendimento ao Cliente'},
+                            {'name': 'Carlos Pereira', 'message': 'Interessado em seus produtos', 'time': '30m atrás', 'bot': 'Vendas'}
                         ]) %}
                         <div class="list-group-item">
                             <div class="d-flex w-100 justify-content-between">
@@ -164,38 +164,38 @@
     </div>
 </div>
 
-<!-- New Bot Modal -->
+<!-- Modal Novo Bot -->
 <div class="modal fade" id="newBotModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create New Bot</h5>
+                <h5 class="modal-title">Criar Novo Bot</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="botName" class="form-label">Bot Name</label>
+                        <label for="botName" class="form-label">Nome do Bot</label>
                         <input type="text" class="form-control" id="botName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="botType" class="form-label">Bot Type</label>
+                        <label for="botType" class="form-label">Tipo do Bot</label>
                         <select class="form-select" id="botType" required>
-                            <option value="">Select a type</option>
-                            <option value="customer_service">Customer Service</option>
-                            <option value="sales">Sales</option>
-                            <option value="support">Support</option>
+                            <option value="">Selecione um tipo</option>
+                            <option value="customer_service">Atendimento ao Cliente</option>
+                            <option value="sales">Vendas</option>
+                            <option value="support">Suporte</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="botDescription" class="form-label">Description</label>
+                        <label for="botDescription" class="form-label">Descrição</label>
                         <textarea class="form-control" id="botDescription" rows="3"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Create Bot</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Criar Bot</button>
             </div>
         </div>
     </div>
@@ -203,10 +203,10 @@
 
 {% block javascript %}
 <script>
-    // Add any custom JavaScript here
+    // Adicione qualquer JavaScript customizado aqui
     function deleteBot(botId) {
-        if (confirm('Are you sure you want to delete this bot?')) {
-            // Add deletion logic here
+        if (confirm('Você tem certeza que deseja excluir este bot?')) {
+            // Adicione a lógica de exclusão aqui
         }
     }
 </script>

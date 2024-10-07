@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <title>{% block title %}Home{% endblock %}</title>
+    <title>{% block title %}Início{% endblock %}</title>
     <style>
         body {
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         #wrapper {
             display: flex;
             min-height: 100vh;
             position: relative;
         }
-
         #sidebar {
             min-width: 250px;
             max-width: 250px;
@@ -31,32 +29,26 @@
             z-index: 1000;
             overflow-y: auto;
         }
-
         #sidebar.collapsed {
             margin-left: -250px;
         }
-
         #sidebar .sidebar-header {
             padding: 20px;
             background-color: #0b5ed7;
         }
-
         #sidebar .nav-link {
             color: white;
             padding: 10px 20px;
             transition: all 0.3s;
         }
-
         #sidebar .nav-link:hover {
             background-color: #0b5ed7;
             padding-left: 25px;
         }
-
         #sidebar .sidebar-divider {
             border-top: 1px solid rgba(255, 255, 255, 0.2);
             margin: 15px 0;
         }
-
         #sidebar .sidebar-heading {
             padding: 10px 20px;
             font-size: 0.85rem;
@@ -64,12 +56,9 @@
             letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.6);
         }
-
         #sidebar .nav-item.active .nav-link {
             background-color: #0b5ed7;
         }
-
-
         #content {
             flex: 1;
             display: flex;
@@ -78,27 +67,21 @@
             transition: all 0.3s ease;
             width: 100%;
         }
-
         #content.expanded {
             margin-left: 0;
         }
-
         .border-left-primary {
             border-left: .25rem solid #4e73df !important;
         }
-
         .border-left-success {
             border-left: .25rem solid #1cc88a !important;
         }
-
         .border-left-info {
             border-left: .25rem solid #36b9cc !important;
         }
-
         .border-left-warning {
             border-left: .25rem solid #f6c23e !important;
         }
-
         .toggle-btn {
             position: fixed;
             left: 260px;
@@ -116,44 +99,35 @@
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
         .toggle-btn.collapsed {
             left: 10px;
         }
-
         .toggle-btn:hover {
             background-color: #0b5ed7;
         }
-
         .logo-img {
             width: 40px;
             height: 50px;
             margin-right: 10px;
         }
-
         main {
             flex: 1;
             padding: 20px;
             margin-top: 40px;
         }
-
         .alert {
             margin-bottom: 0;
         }
-
         .submenu {
             padding-left: 20px;
             display: none;
         }
-
         .submenu.show {
             display: block;
         }
-
         .nav-link[data-bs-toggle="collapse"] {
             position: relative;
         }
-
         .nav-link[data-bs-toggle="collapse"]::after {
             content: '\f107';
             font-family: 'Font Awesome 5 Free';
@@ -162,33 +136,26 @@
             right: 20px;
             transition: transform 0.3s;
         }
-
         .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]::after {
             transform: rotate(180deg);
         }
-
         @media (max-width: 768px) {
             #sidebar {
                 margin-left: -250px;
             }
-
             #content {
                 margin-left: 0;
             }
-
             #sidebar.active {
                 margin-left: 0;
             }
-
             .toggle-btn {
                 left: 10px;
             }
-
             .toggle-btn.active {
                 left: 260px;
             }
         }
-
         .alert-container {
             position: fixed;
             top: 20px;
@@ -198,13 +165,11 @@
             width: 90%;
             max-width: 600px;
         }
-
         .alert {
             margin: 10px 0;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         @media (max-width: 768px) {
             .alert-container {
                 width: 95%;
@@ -212,8 +177,6 @@
                 padding: 0 10px;
             }
         }
-
-        /* Add fade out animation */
         .alert.fade-out {
             opacity: 0;
             transition: opacity 0.5s ease-out;
@@ -222,7 +185,7 @@
 </head>
 <body>
 <div id="wrapper">
-    <!-- Sidebar -->
+    <!-- Barra Lateral -->
     <nav id="sidebar">
         <div class="sidebar-header d-flex align-items-center">
             <img class="logo-img rounded-circle" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo"/>
@@ -230,121 +193,110 @@
         </div>
         <ul class="nav flex-column mt-4">
             {% if user.is_authenticated %}
-                <!-- Dashboard -->
-                <li class="sidebar-heading">Main</li>
+                <!-- Painel Principal -->
+                <li class="sidebar-heading">Principal</li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/"><i class="fas fa-home me-2"></i> Home</a>
+                    <a class="nav-link" href="/"><i class="fas fa-home me-2"></i> Início</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                    <a class="nav-link" href="/dashboard"><i class="fas fa-tachometer-alt me-2"></i> Painel</a>
                 </li>
-
-                <!-- Orders Section -->
+                <!-- Seção de Pedidos -->
                 <div class="sidebar-divider"></div>
-                <li class="sidebar-heading">Orders</li>
+                <li class="sidebar-heading">Pedidos</li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#orderSubmenu">
-                        <i class="fas fa-shopping-cart me-2"></i> Orders
+                        <i class="fas fa-shopping-cart me-2"></i> Pedidos
                     </a>
                     <div class="collapse submenu" id="orderSubmenu">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="/orders/new"><i class="fas fa-plus me-2"></i> New Order</a>
+                                <a class="nav-link" href="/orders/new"><i class="fas fa-plus me-2"></i> Novo Pedido</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/orders/list"><i class="fas fa-list me-2"></i> Order List</a>
+                                <a class="nav-link" href="/orders/list"><i class="fas fa-list me-2"></i> Lista de Pedidos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/orders/pending"><i class="fas fa-clock me-2"></i> Pending</a>
+                                <a class="nav-link" href="/orders/pending"><i class="fas fa-clock me-2"></i> Pendentes</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-
-                <!-- Products Section -->
+                <!-- Seção de Produtos -->
                 <div class="sidebar-divider"></div>
-                <li class="sidebar-heading">Products</li>
+                <li class="sidebar-heading">Produtos</li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#productSubmenu">
-                        <i class="fas fa-box me-2"></i> Products
+                        <i class="fas fa-box me-2"></i> Produtos
                     </a>
                     <div class="collapse submenu" id="productSubmenu">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="/products/new"><i class="fas fa-plus me-2"></i> Add
-                                    Product</a>
+                                <a class="nav-link" href="/products/new"><i class="fas fa-plus me-2"></i> Adicionar Produto</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/products/list"><i class="fas fa-list me-2"></i> Product List</a>
+                                <a class="nav-link" href="/products/list"><i class="fas fa-list me-2"></i> Lista de Produtos</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/products/categories"><i class="fas fa-tags me-2"></i>
-                                    Categories</a>
+                                <a class="nav-link" href="/products/categories"><i class="fas fa-tags me-2"></i> Categorias</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-
-                <!-- Reports Section -->
+                <!-- Seção de Relatórios -->
                 <div class="sidebar-divider"></div>
-                <li class="sidebar-heading">Reports</li>
+                <li class="sidebar-heading">Relatórios</li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#reportSubmenu">
-                        <i class="fas fa-chart-bar me-2"></i> Reports
+                        <i class="fas fa-chart-bar me-2"></i> Relatórios
                     </a>
                     <div class="collapse submenu" id="reportSubmenu">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="/reports/sales"><i class="fas fa-chart-line me-2"></i>
-                                    Sales</a>
+                                <a class="nav-link" href="/reports/sales"><i class="fas fa-chart-line me-2"></i> Vendas</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/reports/inventory"><i class="fas fa-warehouse me-2"></i>
-                                    Inventory</a>
+                                <a class="nav-link" href="/reports/inventory"><i class="fas fa-warehouse me-2"></i> Estoque</a>
                             </li>
                         </ul>
                     </div>
                 </li>
-
-                <!-- Settings & Profile -->
+                <!-- Configurações e Perfil -->
                 <div class="sidebar-divider"></div>
-                <li class="sidebar-heading">Settings</li>
+                <li class="sidebar-heading">Configurações</li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile"><i class="fas fa-user me-2"></i> Profile</a>
+                    <a class="nav-link" href="/profile"><i class="fas fa-user me-2"></i> Perfil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/settings"><i class="fas fa-cog me-2"></i> Settings</a>
+                    <a class="nav-link" href="/settings"><i class="fas fa-cog me-2"></i> Configurações</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
                 </li>
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-2"></i> Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus me-2"></i> Sign Up</a>
+                    <a class="nav-link" href="/sign-up"><i class="fas fa-user-plus me-2"></i> Registrar-se</a>
                 </li>
             {% endif %}
         </ul>
     </nav>
-
-    <!-- Toggle Button -->
+    <!-- Botão de Alternância -->
     <button class="btn toggle-btn" type="button" id="sidebarCollapse">
         <i class="fas fa-bars"></i>
     </button>
-
-    <!-- Page Content -->
+    <!-- Conteúdo da Página -->
     <div id="content">
-        <!-- Then, update the alerts section -->
+        <!-- Atualização da seção de alertas -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="alert-container">
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"
-                             data-auto-dismiss="true">
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" data-auto-dismiss="true">
                             {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
                         </div>
                     {% endfor %}
                 </div>
@@ -354,23 +306,19 @@
             {% block content %}
             {% endblock %}
         </main>
-
         <footer class="bg-light py-3 mt-auto">
             <div class="container text-center">
-                <p class="mb-0">&copy; 2024 LLAS Coxitas. Developed by <a href="https://github.com/Eduwilll"
-                                                                          target="_blank">Eduwilll</a></p>
+                <p class="mb-0">&copy; 2024 LLAS Coxitas. Desenvolvido por <a href="https://github.com/Eduwilll" target="_blank">Eduwilll</a></p>
             </div>
         </footer>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar = document.getElementById('sidebar');
         const content = document.getElementById('content');
         const toggleBtn = document.getElementById('sidebarCollapse');
-
         function updateToggleButton() {
             if (sidebar.classList.contains('collapsed')) {
                 toggleBtn.classList.add('collapsed');
@@ -378,13 +326,11 @@
                 toggleBtn.classList.remove('collapsed');
             }
         }
-
         toggleBtn.addEventListener('click', function () {
             sidebar.classList.toggle('collapsed');
             content.classList.toggle('expanded');
             updateToggleButton();
         });
-
         window.addEventListener('resize', function () {
             if (window.innerWidth <= 768) {
                 sidebar.classList.add('collapsed');
@@ -392,14 +338,13 @@
                 updateToggleButton();
             }
         });
-
-        // Add active class to current page link
+        // Adicionar classe ativa ao link da página atual
         const currentLocation = window.location.pathname;
         const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             if (link.getAttribute('href') === currentLocation) {
                 link.parentElement.classList.add('active');
-                // If link is in submenu, expand the parent menu
+                // Se o link estiver em um submenu, expandir o menu pai
                 const submenu = link.closest('.submenu');
                 if (submenu) {
                     submenu.classList.add('show');
@@ -412,34 +357,29 @@
         });
     });
 </script>
-<!-- Add this JavaScript code before the closing body tag -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Function to handle alert dismissal
+        // Função para lidar com o fechamento do alerta
         function dismissAlert(alert) {
             alert.classList.add('fade-out');
             setTimeout(() => {
                 const bsAlert = new bootstrap.Alert(alert);
                 bsAlert.close();
-            }, 500); // Wait for fade out animation to complete
+            }, 500); // Esperar a animação de desaparecimento completar
         }
-
-        // Get all alerts with auto-dismiss attribute
+        // Obter todos os alertas com atributo de auto-fechamento
         const alerts = document.querySelectorAll('.alert[data-auto-dismiss="true"]');
-
         alerts.forEach(alert => {
-            // Set timeout to dismiss after 2 seconds
+            // Definir timeout para fechar após 2 segundos
             setTimeout(() => {
                 if (alert) {
                     dismissAlert(alert);
                 }
             }, 2000);
-
-            // Optional: Pause timer on hover
+            // Opcional: Pausar temporizador ao passar o mouse sobre o alerta
             alert.addEventListener('mouseenter', function () {
                 alert.dataset.pause = 'true';
             });
-
             alert.addEventListener('mouseleave', function () {
                 alert.dataset.pause = 'false';
             });
@@ -451,7 +391,7 @@
         function deleteNote(noteId) {
             fetch("/delete-note", {
                 method: "POST",
-                body: JSON.stringify({noteId: noteId}),
+                body: JSON.stringify({notaId: noteId}),
             }).then((_res) => {
                 window.location.href = "/";
             });

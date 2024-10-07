@@ -28,6 +28,11 @@ def home():
 def dashboard():
     return render_template('dashboard.html', user=current_user)
 
+@views.route('/orders/pending')
+@login_required
+def pending_orders():
+    return render_template('pending.html', user=current_user)
+
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
     note = json.loads(request.data)
