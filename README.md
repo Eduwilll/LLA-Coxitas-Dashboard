@@ -6,14 +6,10 @@ Este projeto é um Chatbot para automação de atendimento ao cliente de uma loj
 ![Visualização do Projeto](https://i.imgur.com/sEXh0oh.jpeg)
 
 ## Tecnologias Utilizadas
-- **Python 3.12.3**: Linguagem de programação principal do projeto.
 - **Flask**: Framework web utilizado para criar a aplicação web.
 - **Flask-SQLAlchemy**: Extensão do Flask que adiciona suporte a bancos de dados SQL via SQLAlchemy.
 - **Jinja2**: Motor de templates utilizado pelo Flask para renderizar o HTML.
 - **SQLAlchemy**: ORM (Object-Relational Mapping) para manipulação de banco de dados.
-- **Werkzeug**: Biblioteca WSGI utilizada como base do Flask.
-- **click**: Pacote de criação de comandos no terminal, utilizado pelo Flask.
-- **pip**: Gerenciador de pacotes do Python utilizado para instalar as dependências do projeto.
 
 ## Setup e Instalação
 Certifique-se de ter a versão mais recente do Python instalada.
